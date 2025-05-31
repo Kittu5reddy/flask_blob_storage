@@ -1,0 +1,80 @@
+{% extends "base.html" %} {% block title %}Home - Flask Blob Storage{% endblock
+%} {% block content %}
+<div class="container">
+  <div class="upload-form">
+    <h3>Upload File</h3>
+    <form
+      action="/upload"
+      method="post"
+      enctype="multipart/form-data"
+      id="uploadForm"
+    >
+      <div class="file-input-container">
+        <input type="file" name="file" id="fileInput" accept="*/*" required />
+        <label for="fileInput" class="file-input-label">
+          <span class="file-icon">📁</span>
+          <span class="file-text">Choose File</span>
+        </label>
+      </div>
+      <div class="upload-progress" id="uploadProgress" style="display: none">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="progress-text" id="progressText">0%</span>
+      </div>
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+    <div id="uploadResult" class="upload-result"></div>
+  </div>
+</div>
+
+<div class="file-list">
+  <div class="file-list-header">
+    <h3>Stored Files</h3>
+    <div class="view-controls">
+      <div class="view-toggle">
+        <button
+          onclick="toggleView('table')"
+          id="tableBtn"
+          class="btn btn-toggle active"
+        >
+          Table View
+        </button>
+        <button
+          onclick="toggleView('grid')"
+          id="gridBtn"
+          class="btn btn-toggle"
+        >
+          Grid View
+        </button>
+      </div>
+      <div class="filter-controls">
+        <select id="fileTypeFilter" onchange="filterFiles()">
+          <option value="all">All Files</option>
+          <option value="images">Images Only</option>
+          <option value="documents">Documents</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="fileList" class="file-list-content">
+    <div class="loading">Loading files...</div>
+  </div>
+</div>
+
+<!-- Image Modal -->
+<div id="imageModal" class="modal" onclick="closeModal()">
+  <span class="close">&times;</span>
+  <img class="modal-content" id="modalImage" />
+  <div class="modal-info" id="modalInfo"></div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  // Initialize the application
+  document.addEventListener("DOMContentLoaded", function () {
+    loadFiles();
+    setupFileInput();
+    setupUploadForm();
+  });
+</script>
+{% endblock %}
